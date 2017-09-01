@@ -1,0 +1,33 @@
+{
+  "name": "brew-server",
+  "version": "1.0.0",
+  "description": "brew server for temperature",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Adam Peretti",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.17.1",
+    "cron": "^1.2.1",
+    "express": "^4.15.2",
+    "express-fileupload": "^0.1.3",
+    "jsonwebtoken": "^7.3.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.17.1",
+    "mongoose": "^4.8.6",
+    "mongoose-schema-jsonschema": "^1.1.10",
+    "mosca": "^2.2.0",
+    "mqtt": "^2.4.0",
+    "mqtt-connect": "^1.0.1",
+    "mqtt-ws": "^0.2.0",
+    "ws": "^2.2.0"
+  },
+  "devDependencies": {
+    "cors": "^2.8.3",
+    "mqtt-match": "^1.0.2"
+  }
+}

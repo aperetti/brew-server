@@ -1,0 +1,169 @@
+var mongoose = require('mongoose')
+var Schema = mongoose.Schema
+var moment = require('moment')
+
+var GravityVolume = new Schema({
+  volume: Number,
+  gravityMeasured: Number,
+  temperature: Number,
+  gravityCorrected: Number
+})
+
+var MashStep = new Schema({
+  endTemp: Number,
+  name: String,
+  rampTime: Number,
+  temp: Number,
+  type: String,
+  waterRatio: Number
+})
+
+var Spice = new Schema({
+  name: String,
+  form: String,
+  weight: Number,
+  unit: { type: String, default: 'kg' },
+  use: { type: String },
+  aa: Number,
+  time: Number,
+})
+
+var Yeast = new Schema({
+  name: String,
+  attenuation: Number,
+  type: String,
+  weight: Number,
+  unit: { type: String, default: 'g' },
+  preparation: String
+})
+
+var Nutrient = new Schema({
+  name: String,
+  weight: Number,
+  unit: { type: String, default: 'g' }
+})
+
+var Fermentable = new Schema({
+  name: String,
+  color: Number,
+  late: Boolean,
+  weight: Number,
+  unit: { type: String, default: 'kg' },
+  yield: Number,
+  time: Date
+})
+
+var BrewSchema = new Schema({
+  abv: Number,
+  abw: Number,
+  agingDays: Number,
+  agingTemp: Number,
+  author: String,
+  batchSize: Number,
+  batchUnit: { type: String, default: 'L' },
+  batchNumber: Number,
+  boilSize: Number,
+  boilStartTime: Number,
+  boilEndTime: Number,
+  bottlingPressure: Number,
+  bottlingTemp: Number,
+  brewDayDuration: Number,
+  buToGu: Number,
+  bv: Number,
+  calories: Number,
+  color: Number,
+  fg: Number,
+  fgPlato: Number,
+  ibu: Number,
+  ibuMethod: String,
+  mashEfficiency: Number,
+  og: Number,
+  ogPlato: Number,
+  price: Number,
+  primaryDays: Number,
+  primaryTemp: Number,
+  primingCornSugar: Number,
+  primingDme: Number,
+  primingHoney: Number,
+  primingSugar: Number,
+  realExtract: Number,
+  secondaryDays: Number,
+  secondaryTemp: Number,
+  servingSize: Number,
+  steepTime: Number,
+  steepEfficiency: Number,
+  steepTime: Number,
+  style: Object,
+  tertiaryDays: Number,
+  tertiaryTemp: Number,
+  timelineMap: Object,
+  name: { type: String, required: true },
+  status: { type: String, default: 'Available', enum: ['Available', 'Finished'] },
+  dates: {
+    brewed: { type: Date, get: formatDate },
+    racked: { type: Date, get: formatDate },
+    bottled: { type: Date, get: formatDate },
+  },
+  style: {
+    name: String,
+    category: String,
+    gu: [Number],
+    fg: [Number],
+    srm: [Number],
+    ibu: [Number],
+    abv: [Number],
+    carb: [Number]
+  },
+  fermentables: [Fermentable],
+  spices: [Spice],
+  yeast: [Yeast],
+  mash: {
+    grainTemp: { type: Number, default: 23 },
+    name: String,
+    notes: String,
+    ph: Number,
+    spargeTemp: { type: String, default: 76 },
+    steps: [MashStep]
+  },
+  clarifiers: String,
+  nutrients: [Nutrient],
+  mashGraph: {
+    temperature: [Number],
+    time: [Date]
+  },
+  fermentation: {
+    temperature: [Number],
+    time: [Date]
+  },
+  costs: {
+    sugars: Number,
+    spices: Number,
+    yeast: Number,
+    other: Number
+  },
+  gravity: {
+    start: GravityVolume,
+    afterMash: GravityVolume,
+    drained: GravityVolume,
+    preBoil: GravityVolume,
+    postBoil: GravityVolume,
+    inFermentor: GravityVolume,
+    afterFermentation: GravityVolume,
+    bottle: GravityVolume
+  },
+  notes: [{
+    note: String,
+    time: { type: Date, get: formatDate }
+  }]
+}, {
+  toObject: { getters: true },
+  toJSON: { getters: true }
+})
+
+function formatDate(v) {
+  if (v) return moment(v).format('YYYY-MM-DD')
+  else return null
+}
+
+var Brew = mongoose.model('Brew', BrewSchema)
+module.exports = Brew
